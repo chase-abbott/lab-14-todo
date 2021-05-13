@@ -69,12 +69,12 @@ describe('API Routes', () => {
     })
 
 
-    it.skip('GET /api/me/todos', async () => {
+    it('GET /api/me/todos', async () => {
 
       // remove this line, here to not have lint error:
       user.token;
       const response = await request
-        .get('api/me/todos')
+        .get('/api/me/todos')
         .set('Authorization', user.token)
 
       expect(response.status).toBe(200);
