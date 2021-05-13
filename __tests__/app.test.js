@@ -100,5 +100,19 @@ describe('API Routes', () => {
 
     });
 
+    it('DELETE /api/todos:id', async () => {
+      const response = await request
+        .delete(`/api/todos${todo.id}`)
+        .set(`Authorization`, user.token)
+
+      const secondResponse = await request
+        .get('/api/me/todos')
+        .set('Authorization', user.token)
+
+      expect(response.status).toBe(200);
+      expect(response.body).toStrictEqual([todo]);
+      expect(secondResponse.body.find(todoObject => todoObject.id === todo.id)).toBeUndefined();
+    })
+
   });
 });
