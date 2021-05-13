@@ -1,0 +1,43 @@
+{
+  "name": "simple-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "start:watch": "nodemon server.js",
+    "lint": "eslint .",
+    "test": "node --experimental-vm-modules ./node_modules/.bin/jest --verbose --runInBand",
+    "test:watch": "npm run test -- --watch",
+    "create-tables": "node data/create-tables.js",
+    "drop-tables": "node data/drop-tables.js",
+    "load-seed-data": "node data/load-seed-data.js",
+    "recreate-tables": "npm run drop-tables && npm run create-tables",
+    "setup-db": "npm run recreate-tables && npm run load-seed-data",
+    "setup-db:prod": "heroku run npm run setup-db",
+    "setup-heroku": "npm run create-heroku-db && npm run create-heroku-db -- --as DEV_DATABASE && heroku config:set PGSSLMODE=require && npm run get-dev-db-url",
+    "create-heroku-db": "heroku addons:create heroku-postgresql:hobby-dev",
+    "get-dev-db-url": "heroku config:get DEV_DATABASE_URL",
+    "get-prod-db-url": "heroku config:get DATABASE_URL"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0",
+    "pg": "^8.6.0",
+    "superagent": "^6.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.25.0",
+    "jest": "^26.6.3",
+    "nodemon": "^2.0.7",
+    "supertest": "^6.1.3"
+  }
+}
