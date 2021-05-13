@@ -17,14 +17,10 @@ async function run() {
         hash VARCHAR(512) NOT NULL
       );
     
-      CREATE TABLE cats (
+      CREATE TABLE todos (
         id SERIAL PRIMARY KEY NOT NULL,
-        name VARCHAR(512) NOT NULL,
-        type VARCHAR(128) NOT NULL,
-        url VARCHAR(1024) NOT NULL,
-        year INTEGER NOT NULL,
-        lives INTEGER NOT NULL,
-        is_sidekick BOOLEAN DEFAULT FALSE NOT NULL,
+        task VARCHAR(512) NOT NULL,
+        completed BOOLEAN NOT NULL,
         user_id INTEGER NOT NULL REFERENCES users(id)
       );
     `);
