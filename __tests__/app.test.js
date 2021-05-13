@@ -48,6 +48,11 @@ describe('API Routes', () => {
       completed: false
     };
 
+    let secondTodo = {
+      id: expect.any(Number),
+      task: 'clean floors',
+      completed: false
+    };
 
     // append the token to your requests:
     //  .set('Authorization', user.token);
@@ -59,21 +64,13 @@ describe('API Routes', () => {
         .send(todo);
       todo.userId = user.id;
 
-
       expect(response.status).toBe(200);
       expect(response.body).toEqual(todo);
       todo = response.body;
-      console.log(todo);
     });
 
 
     it('GET /api/me/todos', async () => {
-      let secondTodo = {
-        id: expect.any(Number),
-        task: 'clean floors',
-        completed: false
-      };
-
 
       const postResponse = await request
         .post('/api/todos')
@@ -112,6 +109,34 @@ describe('API Routes', () => {
       expect(response.status).toBe(200);
       expect(response.body).toStrictEqual([todo]);
       expect(secondResponse.body.find(todoObject => todoObject.id === todo.id)).toBeUndefined();
+    })
+
+    it('PUT /api/todos/:id/completed allows completed to change but not task, id, or userId', async () => {
+      secondTodo.completed = true;
+
+      const response = await request
+        .put(`/api/todos/${secondTodo.id}/completed`)
+        .set('Authorization', user2.token)
+        .send(secondTodo)
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(secondTodo)
+
+      secondTodo.task = 'take out the trash';
+
+      const secondResponse = await request
+        .put(`/api/todos/${secondTodo.id}/completed`)
+        .set('Authorization', user2.token)
+        .send(secondTodo)
+
+      expect(secondResponse.status).toBe(200);
+      expect(secondResponse.body).toEqual({
+        id: expect.any(Number),
+        task: 'clean floors',
+        completed: true,
+        userId: expect.any(Number)
+      })
+
     })
 
   });
