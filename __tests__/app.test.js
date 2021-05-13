@@ -2,6 +2,7 @@ import client from '../lib/client.js';
 import supertest from 'supertest';
 import app from '../lib/app.js';
 import { execSync } from 'child_process';
+import request from 'superagent';
 
 const request = supertest(app);
 
