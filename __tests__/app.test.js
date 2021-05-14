@@ -101,16 +101,16 @@ describe('API Routes', () => {
     it('DELETE /api/todos:id', async () => {
       const response = await request
         .delete(`/api/todos${todo.id}`)
-        .set(`Authorization`, user.token)
+        .set('Authorization', user.token);
 
       const secondResponse = await request
         .get('/api/me/todos')
-        .set('Authorization', user.token)
+        .set('Authorization', user.token);
 
       expect(response.status).toBe(200);
       expect(response.body).toStrictEqual([todo]);
       expect(secondResponse.body.find(todoObject => todoObject.id === todo.id)).toBeUndefined();
-    })
+    });
 
     it('PUT /api/todos/:id/completed allows completed to change but not task, id, or userId', async () => {
       secondTodo.completed = true;
@@ -118,17 +118,17 @@ describe('API Routes', () => {
       const response = await request
         .put(`/api/todos/${secondTodo.id}/completed`)
         .set('Authorization', user2.token)
-        .send(secondTodo)
+        .send(secondTodo);
 
       expect(response.status).toBe(200);
-      expect(response.body).toEqual(secondTodo)
+      expect(response.body).toEqual(secondTodo);
 
       secondTodo.task = 'take out the trash';
 
       const secondResponse = await request
         .put(`/api/todos/${secondTodo.id}/completed`)
         .set('Authorization', user2.token)
-        .send(secondTodo)
+        .send(secondTodo);
 
       expect(secondResponse.status).toBe(200);
       expect(secondResponse.body).toEqual({
@@ -136,9 +136,9 @@ describe('API Routes', () => {
         task: 'clean floors',
         completed: true,
         userId: expect.any(Number)
-      })
+      });
 
-    })
+    });
 
   });
 });
