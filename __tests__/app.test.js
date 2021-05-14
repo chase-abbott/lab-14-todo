@@ -40,7 +40,7 @@ describe('API Routes', () => {
 
       user = response.body;
       user2 = secondResponse.body;
-      console.log(user.token)
+
     });
 
     let todo = {
@@ -98,9 +98,16 @@ describe('API Routes', () => {
 
     });
 
-    it('DELETE /api/todos:id', async () => {
+    it('DELETE /api/todos/:id', async () => {
+      const fakeResponse = await request
+        .delete(`/api/todos/${todo.id}`)
+        .set('Authorization', user2.token)
+
+      expect(fakeResponse.status).toBe(200);
+      expect(fakeResponse.body).toEqual([]);
+
       const response = await request
-        .delete(`/api/todos${todo.id}`)
+        .delete(`/api/todos/${todo.id}`)
         .set('Authorization', user.token);
 
       const secondResponse = await request
