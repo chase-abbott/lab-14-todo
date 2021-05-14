@@ -72,6 +72,8 @@ describe('API Routes', () => {
       todo = response.body;
     });
 
+    
+
     it('PUT /api/todos/:id/shared', async () => {
       todo.shared = true;
       const response = await request
@@ -129,6 +131,26 @@ describe('API Routes', () => {
       expect(response2.status).toBe(200);
       expect(response2.body).toEqual(expect.not.arrayContaining([todo]));
 
+    });
+
+    it('GET /api/todos', async () => {
+      const response = await request
+        .get('/api/todos')
+        .set('Authorization', user.token);
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(expect.arrayContaining([
+        {
+          id: expect.any(Number),
+          task: 'wash dishes',
+          completed: false,
+          shared: true,
+          user_id: expect.any(Number),
+          email: `${user.email}`
+        }
+      ]
+      )
+        
+      );
     });
 
     it('DELETE /api/todos/:id', async () => {
