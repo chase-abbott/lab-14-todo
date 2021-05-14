@@ -40,6 +40,7 @@ describe('API Routes', () => {
 
       user = response.body;
       user2 = secondResponse.body;
+      console.log(user.token)
     });
 
     let todo = {
