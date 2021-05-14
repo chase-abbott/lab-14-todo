@@ -45,13 +45,15 @@ describe('API Routes', () => {
     let todo = {
       id: expect.any(Number),
       task: 'wash dishes',
-      completed: false
+      completed: false,
+      shared: false
     };
 
     let secondTodo = {
       id: expect.any(Number),
       task: 'clean floors',
-      completed: false
+      completed: false,
+      shared: false
     };
 
     // append the token to your requests:
@@ -67,6 +69,37 @@ describe('API Routes', () => {
       expect(response.status).toBe(200);
       expect(response.body).toEqual(todo);
       todo = response.body;
+    });
+
+    it('PUT /api/todos/:id/shared', async () => {
+      todo.shared = true;
+      const response = await request
+        .put(`/api/todos/${todo.id}/shared`)
+        .set('Authorization', user.token)
+        .send(todo);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({
+        id: expect.any(Number),
+        task: 'wash dishes',
+        completed: false,
+        userId: expect.any(Number),
+        shared: true
+        
+      });
+
+      const response2 = await request
+        .put(`/api/todos/${todo.id}/shared`)
+        .set('Authorization', user2.token)
+        .send({
+          id: expect.any(Number),
+          task: 'wash dishes',
+          completed: false,
+          userId: expect.any(Number),
+          shared: false
+        });
+      expect(response2.status).toBe(200);
+      expect(response2.body).toEqual('');
     });
 
 
@@ -97,9 +130,14 @@ describe('API Routes', () => {
 
     });
 
-    it('DELETE /api/todos:id', async () => {
+    it('DELETE /api/todos/:id', async () => {
+      const response2 = await request
+        .delete(`/api/todos/${todo.id}`)
+        .set('Authorization', user2.token);
+      expect(response2.status).toBe(200);
+      expect(response2.body).toEqual([]);
       const response = await request
-        .delete(`/api/todos${todo.id}`)
+        .delete(`/api/todos/${todo.id}`)
         .set('Authorization', user.token);
 
       const secondResponse = await request
@@ -134,6 +172,7 @@ describe('API Routes', () => {
         id: expect.any(Number),
         task: 'clean floors',
         completed: true,
+        shared: false,
         userId: expect.any(Number)
       });
 

@@ -2,7 +2,8 @@
 const todos = [
   {
     task: 'wash dishes',
-    completed: false
+    completed: false,
+    shared: false
   }
 ];
 
